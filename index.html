@@ -1,48 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Página Exemplo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Portfólio de [Seu Nome]</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <header>
-        <h1>Bem-vindo à Minha Página</h1>
-        <nav>
+        <nav class="menu-navegacao">
             <ul>
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#sobre">Sobre mim</a></li>
+                <li><a href="#formacao">Formação</a></li>
+                <li><a href="#portfolio">Portfólio</a></li>
                 <li><a href="#contato">Contato</a></li>
             </ul>
         </nav>
+    </header>
 
     <main>
-        <section id="inicio">
-            <h2>Início</h2>
-            <p>Conteúdo principal da página.</p>
+
+        <section id="sobre" class="secao">
+            <h2>Sobre mim</h2>
+            <p>Olá! Meu nome é [Seu Nome]. Sou um estudante de [Seu Curso] apaixonado por tecnologia e desenvolvimento web.</p>
+            <p>Meus hobbies incluem [Seu Hobby 1], [Seu Hobby 2] e aprender coisas novas.</p>
+            </section>
+
+        <section id="formacao" class="secao">
+            <h2>Formação</h2>
+            <h3>Formação Educacional</h3>
+            <ul>
+                <li>Graduação em [Nome do Curso] - [Nome da Instituição] (Em andamento)</li>
+                </ul>
+            <h3>Idiomas</h3>
+            <ul>
+                <li>Português (Nativo)</li>
+                <li>Inglês (Intermediário)</li>
+            </ul>
+            <h3>Cursos Complementares</h3>
+            <ul>
+                <li>Fundamentos da Programação Web - UNINTER [cite: 3]</li>
+            </ul>
         </section>
 
-        <section id="sobre">
-            <h2>Sobre</h2>
-            <p>Informações sobre o site ou autor.</p>
+        <section id="portfolio" class="secao">
+            <h2>Portfólio</h2>
+            <p>Estes são alguns dos projetos que desenvolvi:</p>
+            <div class="projetos-container">
+                <div class="projeto">
+                    <h3>Projeto 1 (Ex: Este Portfólio)</h3>
+                    <p>Portfólio pessoal desenvolvido com HTML5, CSS3 e JavaScript puros.</p>
+                    <a href="[URL_DO_SEU_REPOSITORIO_GITHUB]" target="_blank">Ver Código no GitHub</a>
+                </div>
+                
+                <div class="projeto">
+                    <h3>Projeto 2 (Ex: Mata-Mosquito)</h3>
+                    <p>Um jogo simples criado durante o curso (exemplo da atividade).</p>
+                    <a href="[LINK_PARA_OUTRO_PROJETO]" target="_blank">Ver Projeto</a>
+                </div>
+            </div>
         </section>
 
-        <section id="contato">
+        <section id="contato" class="secao">
             <h2>Contato</h2>
-            <form action="#" method="post">
-                <label for="nome">Nome:</label>
-                <input id="nome" name="nome" type="text" required />
+            <p>Fique à vontade para me enviar uma mensagem!</p>
 
-                <label for="email">Email:</label>
-                <input id="email" name="email" type="email" required />
-
-                <button type="submit">Enviar</button>
+            <form id="form-contato">
+                <div class="campo-form">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite seu nome">
+                </div>
+                
+                <div class="campo-form">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+                </div>
+                
+                <div class="campo-form">
+                    <label for="mensagem">Mensagem:</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem"></textarea>
+                </div>
+                
+                <button type="submit">Enviar Mensagem</button>
             </form>
+            
+            <div id="feedback-mensagem"></div>
         </section>
+
     </main>
 
     <footer>
-        <p>&copy; 2025 Seu Nome</p>
+        <p>&copy; 2025 [Seu Nome]. Todos os direitos reservados.</p>
     </footer>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
