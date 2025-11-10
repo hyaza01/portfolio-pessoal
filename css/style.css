@@ -1339,174 +1339,299 @@ section {
 /* ===================================
    RESPONSIVIDADE
    =================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* base; você pode ajustar para 16px se preferir */
+  font-size: 16px;
+}
+
+/* Garante que imagens e ícones dentro de profile fiquem responsivos */
+.profile-card {
+  width: 300px;
+  max-width: 90%;
+  height: auto;              /* evita corte */
+  aspect-ratio: 1 / 1;       /* mantém proporção quadrada */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.profile-image {
+  width: 60%;
+  max-width: 180px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Se estiver usando um <i> para ícone, use clamp para escalar bem */
+.profile-image i {
+  font-size: clamp(3.5rem, 6vw, 7rem);
+  line-height: 1;
+}
+
+/* Botões e áreas tocáveis maiores em mobile */
+.btn {
+  padding: 0.85rem 1rem;
+  min-height: 44px; /* touch target */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+}
+
+/* Hero title responsivo fluido */
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.05;
+}
+
+/* Section title fluido */
+.section-title {
+  font-size: clamp(1.4rem, 3.2vw, 2.2rem);
+}
+
+/* Menu nav - garante que fique acima de tudo */
+.menu-nav {
+  z-index: 9999;
+}
+
+/* --- Media: Tablets e pequenas telas (<= 1024px) --- */
 @media (max-width: 1024px) {
-    .hero-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-image {
-        order: -1;
-    }
-    
-    .profile-card {
-        width: 300px;
-        height: 300px;
-    }
-    
-    .profile-image {
-        width: 180px;
-        height: 180px;
-    }
-    
-    .profile-image i {
-        font-size: 7rem;
-    }
-    
-    .hero-buttons,
-    .hero-social {
-        justify-content: center;
-    }
-    
-    .sobre-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .timeline::before {
-        left: 30px;
-    }
-    
-    .timeline-item {
-        flex-direction: row !important;
-        padding-left: 80px;
-    }
-    
-    .timeline-marker {
-        left: 30px;
-    }
-    
-    .timeline-content {
-        width: 100%;
-    }
-    
-    .contato-wrapper {
-        grid-template-columns: 1fr;
-    }
-    
-    .info-card {
-        position: static;
-    }
+  .hero-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      text-align: center;
+      align-items: center;
+  }
+
+  /* Coloca a imagem antes do conteúdo no fluxo visual */
+  .hero-image {
+      order: -1;
+      margin-bottom: 0.5rem;
+  }
+
+  .profile-card {
+      width: min(320px, 80%);
+      aspect-ratio: 1 / 1;
+  }
+
+  .profile-image {
+      max-width: 180px;
+  }
+
+  .hero-buttons,
+  .hero-social {
+      justify-content: center;
+      gap: .75rem;
+  }
+
+  .sobre-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+  }
+
+  /* Timeline: reduz deslocamento e empilha conteúdo */
+  .timeline::before {
+      left: 30px;
+  }
+
+  .timeline-item {
+      flex-direction: column !important; /* empilha no tablet para evitar sobreposição */
+      padding-left: 64px;
+      gap: .75rem;
+  }
+
+  .timeline-marker {
+      left: 30px;
+  }
+
+  .timeline-content {
+      width: 100%;
+  }
+
+  .contato-wrapper {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+  }
+
+  .info-card {
+      position: static;
+      width: 100%;
+  }
 }
 
+/* --- Media: Mobile (<= 768px) --- */
 @media (max-width: 768px) {
-    html {
-        font-size: 14px;
-    }
-    
-    .menu-toggle {
-        display: flex;
-    }
-    
-    .menu-nav {
-        position: fixed;
-        top: var(--header-height);
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        background: var(--cor-fundo);
-        padding: 2rem;
-        gap: 0.5rem;
-        transform: translateY(-100%);
-        opacity: 0;
-        visibility: hidden;
-        transition: var(--transicao-normal);
-        box-shadow: var(--sombra-grande);
-    }
-    
-    .menu-nav.active {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .experiencia-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .certificacoes-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .extras-section {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-buttons {
-        flex-direction: column;
-    }
-    
-    .footer-content {
-        flex-direction: column;
-        gap: 2rem;
-        text-align: center;
-    }
+  html {
+      font-size: 14px;
+  }
+  
+  .menu-toggle {
+      display: flex;
+  }
+
+  .menu-nav {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      flex-direction: column;
+      background: var(--cor-fundo);
+      padding: 1.5rem;
+      gap: 0.5rem;
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transicao-normal);
+      box-shadow: var(--sombra-grande);
+      height: calc(100vh - var(--header-height));
+      overflow-y: auto;
+  }
+
+  .menu-nav.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+  }
+
+  .hero-title {
+      font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+  }
+
+  .section-title {
+      font-size: clamp(1.4rem, 4.5vw, 2rem);
+  }
+
+  .hero-buttons {
+      flex-direction: column;
+      gap: .6rem;
+  }
+
+  .btn {
+      width: 100%;
+      justify-content: center;
+      padding: .9rem;
+  }
+
+  .experiencia-grid,
+  .certificacoes-grid,
+  .extras-section {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+  }
+
+  .form-buttons {
+      flex-direction: column;
+      gap: .5rem;
+  }
+
+  .footer-content {
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: center;
+  }
+
+  /* Timeline: linha mais próxima e itens empilhados */
+  .timeline::before {
+      left: 20px;
+      width: 3px;
+  }
+
+  .timeline-item {
+      padding-left: 56px;
+      align-items: flex-start;
+      gap: .5rem;
+  }
+
+  .timeline-marker {
+      left: 18px;
+  }
 }
 
+/* --- Small Mobile (<= 480px) --- */
 @media (max-width: 480px) {
-    .container {
-        padding: 0 1rem;
-    }
-    
-    .hero-title {
-        font-size: 2rem;
-    }
-    
-    .profile-card {
-        width: 250px;
-        height: 250px;
-    }
-    
-    .profile-image {
-        width: 150px;
-        height: 150px;
-    }
-    
-    .profile-image i {
-        font-size: 5rem;
-    }
+  .container {
+      padding: 0 1rem;
+  }
 
-    /* CORREÇÃO 1: 
-      Garante que o grid de certificações seja 1 coluna. 
-      (O 'minmax' original podia causar problemas em telas < 280px)
-    */
-    .certificacoes-grid {
-        grid-template-columns: 1fr;
-    }
+  .hero-title {
+      font-size: clamp(1.6rem, 7vw, 2rem);
+  }
 
-    /* CORREÇÃO 2 (PRINCIPAL): 
-      O 'minmax(400px, 1fr)' original quebrava o layout em celulares.
-      Esta regra (que já estava no breakpoint de 768px)
-      é repetida aqui para garantir que telas pequenas
-      usem 1 coluna e não causem overflow.
-    */
-    .extras-section {
-        grid-template-columns: 1fr;
-    }
+  .profile-card {
+      width: min(260px, 86%);
+      aspect-ratio: 1 / 1;
+      padding: .75rem;
+  }
+
+  .profile-image {
+      width: 58%;
+      max-width: 150px;
+      height: auto;
+  }
+
+  .profile-image i {
+      font-size: clamp(3rem, 10vw, 5rem);
+  }
+
+  /* CORREÇÃO DO "TORTO" (Principal): empilha avatar + texto centralizados */
+  .perfil-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .5rem;
+  }
+
+  /* CORREÇÃO DO "TORTO" (Secundário): ícones de contato empilhados */
+  .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .25rem;
+  }
+
+  .contact-item .contact-icon {
+      margin-bottom: 0.25rem;
+  }
+
+  /* Pequenas otimizações de espaçamento para telas muito pequenas */
+  .hero-content, .sobre-grid, .contato-wrapper {
+      gap: .75rem;
+  }
+
+  /* Garante que qualquer texto longo quebre sem estourar */
+  .profile-card .nome-completo,
+  .profile-card .titulo {
+      word-break: break-word;
+      overflow-wrap: anywhere;
+  }
 }
+
+/* --- Acessibilidade e foco (útil em mobile quando navegando com teclado/voz) --- */
+a:focus, button:focus {
+  outline: 3px solid rgba(0,0,0,0.12);
+  outline-offset: 2px;
+  border-radius: .35rem;
+}
+
+/* --- Observações finais:
+ * - Se usar background-image para avatar, prefira uma <img> para que o object-fit funcione.
+ * - Ajuste variáveis --header-height e --cor-fundo se necessário.
+ * - Se timeline ainda ficar desalinhada, me envie o HTML da timeline que eu deixo *pixel-perfect*.
+ */
