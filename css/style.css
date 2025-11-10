@@ -1213,6 +1213,7 @@ section {
     text-align: center;
     padding-top: 1rem;
     border-top: 1px solid var(--cor-fundo);
+    justify-content: center;
 }
 
 .privacy-note i {
@@ -1505,13 +1506,36 @@ section {
         padding: 0.4rem 0.8rem;
     }
     
+    /* CORREÇÃO: Centralizar nome e informações em mobile */
     .perfil-header {
         flex-direction: column;
         text-align: center;
+        align-items: center;
     }
     
     .perfil-header h3 {
         font-size: 1.25rem;
+        text-align: center;
+    }
+    
+    .perfil-tag {
+        text-align: center;
+    }
+    
+    /* CORREÇÃO: Centralizar seção "Sobre Mim" */
+    .section-sobre .section-header {
+        text-align: center;
+    }
+    
+    /* CORREÇÃO: Centralizar título "Competências & Habilidades" */
+    .competencias-title {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    /* CORREÇÃO: Centralizar seção "Entre em Contato" */
+    .section-contato .section-header {
+        text-align: center;
     }
     
     .experiencia-grid {
@@ -1558,6 +1582,10 @@ section {
     
     .timeline::before {
         left: 20px;
+    }
+    
+    .privacy-note {
+        justify-content: center;
     }
 }
 
