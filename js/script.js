@@ -1,7 +1,6 @@
 /**
  * PORTFÓLIO PESSOAL - SCRIPT PRINCIPAL
- * 
- * Funcionalidades:
+ * * Funcionalidades:
  * - Menu mobile responsivo
  * - Navegação suave entre seções
  * - Animações ao rolar (AOS)
@@ -366,7 +365,10 @@ function initContactForm() {
 // EFEITOS ADICIONAIS
 // ===================================
 
-// Adicionar efeito parallax suave ao hero
+// CORREÇÃO 1: Efeito Parallax removido (comentado).
+// Este script estava "brigando" com a animação CSS (@keyframes float)
+// e causando lentidão (engasgos) em celulares.
+/*
 window.addEventListener('scroll', function() {
     const scrolled = window.pageYOffset;
     const heroShapes = document.querySelectorAll('.shape');
@@ -376,6 +378,7 @@ window.addEventListener('scroll', function() {
         shape.style.transform = `translateY(${scrolled * speed}px)`;
     });
 });
+*/
 
 // Fade in header ao rolar
 let lastScroll = 0;
@@ -392,6 +395,11 @@ window.addEventListener('scroll', function() {
             // Rolando para cima
             header.style.transform = 'translateY(0)';
         }
+    } else {
+        // CORREÇÃO 2: Adicionado este 'else'.
+        // Isso corrige o bug onde o menu ficava escondido
+        // se o usuário rolasse de volta para o topo.
+        header.style.transform = 'translateY(0)';
     }
     
     lastScroll = currentScroll;

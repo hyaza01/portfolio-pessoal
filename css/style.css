@@ -58,6 +58,8 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    /* CORREÇÃO: Adicionado overflow-x-hidden ao HTML também para garantir */
+    overflow-x: hidden;
 }
 
 body {
@@ -465,6 +467,8 @@ a:hover {
    =================================== */
 section {
     padding: 5rem 0;
+    /* CORREÇÃO: Adicionado para evitar que algum elemento filho cause overflow */
+    overflow: hidden;
 }
 
 .section-header {
@@ -1486,5 +1490,23 @@ section {
     
     .profile-image i {
         font-size: 5rem;
+    }
+
+    /* CORREÇÃO 1: 
+      Garante que o grid de certificações seja 1 coluna. 
+      (O 'minmax' original podia causar problemas em telas < 280px)
+    */
+    .certificacoes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* CORREÇÃO 2 (PRINCIPAL): 
+      O 'minmax(400px, 1fr)' original quebrava o layout em celulares.
+      Esta regra (que já estava no breakpoint de 768px)
+      é repetida aqui para garantir que telas pequenas
+      usem 1 coluna e não causem overflow.
+    */
+    .extras-section {
+        grid-template-columns: 1fr;
     }
 }
