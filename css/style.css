@@ -340,6 +340,7 @@ a:hover {
 .hero-social {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .social-link {
@@ -370,8 +371,10 @@ a:hover {
 
 .profile-card {
     position: relative;
-    width: 400px;
-    height: 400px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    aspect-ratio: 1;
     background: var(--cor-cartao);
     border-radius: var(--border-radius-grande);
     padding: 2rem;
@@ -398,12 +401,15 @@ a:hover {
 .profile-image {
     width: 250px;
     height: 250px;
+    max-width: 70%;
+    max-height: 70%;
     border-radius: 50%;
     background: var(--gradiente-principal);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
 .profile-image i {
@@ -415,6 +421,7 @@ a:hover {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .badge {
@@ -538,6 +545,7 @@ section {
 .perfil-avatar {
     width: 80px;
     height: 80px;
+    min-width: 80px;
     border-radius: 50%;
     background: var(--gradiente-principal);
     display: flex;
@@ -545,11 +553,13 @@ section {
     justify-content: center;
     font-size: 2.5rem;
     color: white;
+    overflow: hidden;
 }
 
 .perfil-header h3 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
+    word-break: break-word;
 }
 
 .perfil-tag {
@@ -566,7 +576,7 @@ section {
 
 .info-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
 }
 
@@ -574,7 +584,9 @@ section {
     font-size: 1.5rem;
     color: var(--cor-primaria-clara);
     width: 30px;
+    min-width: 30px;
     text-align: center;
+    margin-top: 0.25rem;
 }
 
 .info-item strong {
@@ -586,6 +598,7 @@ section {
 
 .info-item span {
     color: var(--cor-texto);
+    word-break: break-word;
 }
 
 .perfil-contact {
@@ -604,6 +617,7 @@ section {
     color: var(--cor-texto-secundario);
     font-size: 0.95rem;
     transition: var(--transicao-rapida);
+    word-break: break-all;
 }
 
 .contact-btn:hover {
@@ -838,13 +852,15 @@ section {
 .exp-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 1.5rem;
+    gap: 1rem;
 }
 
 .exp-icon {
     width: 60px;
     height: 60px;
+    min-width: 60px;
     border-radius: var(--border-radius);
     background: var(--gradiente-principal);
     display: flex;
@@ -860,6 +876,7 @@ section {
     border-radius: 20px;
     font-size: 0.85rem;
     color: var(--cor-primaria-clara);
+    white-space: nowrap;
 }
 
 .exp-card h3 {
@@ -959,7 +976,7 @@ section {
 
 .extras-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -1012,6 +1029,7 @@ section {
 .atividades-list i {
     color: var(--cor-primaria-clara);
     margin-top: 0.25rem;
+    min-width: 20px;
 }
 
 /* ===================================
@@ -1061,6 +1079,7 @@ section {
 .contact-icon {
     width: 50px;
     height: 50px;
+    min-width: 50px;
     border-radius: var(--border-radius);
     background: var(--gradiente-principal);
     display: flex;
@@ -1081,6 +1100,7 @@ section {
 .contact-details span {
     color: var(--cor-texto-claro);
     line-height: 1.5;
+    word-break: break-word;
 }
 
 .contact-details a:hover {
@@ -1089,7 +1109,7 @@ section {
 
 .horario {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
     background: var(--cor-fundo);
@@ -1100,6 +1120,7 @@ section {
 .horario i {
     font-size: 1.5rem;
     color: var(--cor-primaria-clara);
+    margin-top: 0.25rem;
 }
 
 .contact-form {
@@ -1338,6 +1359,7 @@ section {
     .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 2rem;
     }
     
     .hero-image {
@@ -1345,8 +1367,7 @@ section {
     }
     
     .profile-card {
-        width: 300px;
-        height: 300px;
+        max-width: 300px;
     }
     
     .profile-image {
@@ -1394,196 +1415,265 @@ section {
 }
 
 @media (max-width: 768px) {
-	/* Ajustes para melhorar organização em celulares / tablets */
-	html {
-		font-size: 14px;
-	}
-
-	.menu-toggle {
-		display: flex;
-		z-index: 1100; /* garante que o toggle fique acima do menu overlay */
-	}
-
-	/* Transformar o menu em overlay full-screen com rolagem interna */
-	.menu-nav {
-		position: fixed;
-		top: var(--header-height);
-		left: 0;
-		right: 0;
-		bottom: 0;
-		flex-direction: column;
-		background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
-		padding: 2.5rem 1.25rem;
-		gap: 0.5rem;
-		transform: translateY(-100%);
-		opacity: 0;
-		visibility: hidden;
-		transition: var(--transicao-normal);
-		box-shadow: var(--sombra-grande);
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	.menu-nav.active {
-		transform: translateY(0);
-		opacity: 1;
-		visibility: visible;
-	}
-
-	/* Nav links ocupam largura inteira e centralizam conteúdo */
-	.menu-nav .nav-link {
-		width: 100%;
-		justify-content: center;
-		padding: 1rem 1.25rem;
-		font-size: 1.05rem;
-		border-radius: 10px;
-	}
-
-	.hero-title {
-		font-size: 2.1rem;
-	}
-
-	.hero-content {
-		grid-template-columns: 1fr;
-		text-align: center;
-		gap: 2rem;
-		padding: 1rem 0;
-	}
-
-	.hero-buttons {
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.btn {
-		width: 100%;
-		justify-content: center;
-		padding: 0.85rem 1rem;
-	}
-
-	/* Tornar o card de perfil mais fluido e centralizado */
-	.profile-card {
-		width: 100%;
-		max-width: 360px;
-		height: auto;
-		padding: 1.5rem;
-		margin: 1.75rem auto;
-	}
-
-	.profile-image {
-		width: 140px;
-		height: 140px;
-	}
-
-	.profile-image i {
-		font-size: 4.5rem;
-	}
-
-	/* Menos espaçamento em seções para caber melhor em telas pequenas */
-	.sobre-grid {
-		grid-template-columns: 1fr;
-		gap: 1.5rem;
-	}
-
-	/* Timeline: alinhar verticalmente para evitar sobreposição */
-	.timeline::before {
-		left: 24px;
-	}
-
-	.timeline-item {
-		flex-direction: column !important;
-		padding-left: 64px;
-		align-items: flex-start;
-		gap: 1rem;
-	}
-
-	.timeline-marker {
-		left: 24px;
-		transform: translateX(-50%);
-	}
-
-	.timeline-content {
-		width: 100%;
-	}
-
-	/* Contato: simplificar layout */
-	.contato-wrapper {
-		grid-template-columns: 1fr;
-		gap: 1.25rem;
-	}
-
-	.info-card {
-		position: static;
-		top: auto;
-	}
-
-	/* Inputs e textarea com padding e fonte mais apropriados para toque */
-	.form-group input,
-	.form-group textarea {
-		padding: 0.85rem;
-		font-size: 0.95rem;
-	}
-
-	/* Rodapé mais compacto */
-	.footer-content {
-		flex-direction: column;
-		text-align: center;
-		gap: 1.25rem;
-	}
+    html {
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    section {
+        padding: 3rem 0;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .menu-nav {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--cor-fundo);
+        padding: 2rem;
+        gap: 0.5rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transicao-normal);
+        box-shadow: var(--sombra-grande);
+        max-height: calc(100vh - var(--header-height));
+        overflow-y: auto;
+    }
+    
+    .menu-nav.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-header {
+        margin-bottom: 2.5rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .profile-card {
+        max-width: 280px;
+        padding: 1.5rem;
+    }
+    
+    .profile-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .profile-badges {
+        gap: 0.5rem;
+    }
+    
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .perfil-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .perfil-header h3 {
+        font-size: 1.25rem;
+    }
+    
+    .experiencia-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .exp-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .exp-period {
+        white-space: normal;
+    }
+    
+    .certificacoes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .extras-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .timeline-item {
+        padding-left: 60px;
+    }
+    
+    .timeline-marker {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+        left: 20px;
+    }
+    
+    .timeline::before {
+        left: 20px;
+    }
 }
 
 @media (max-width: 480px) {
-	/* ...existing code... */
-	/* Ajustes adicionais para pequenos celulares */
-	.container {
-		padding: 0 0.75rem;
-	}
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .hero-greeting {
+        font-size: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+    }
+    
+    .profile-card {
+        max-width: 250px;
+        padding: 1.25rem;
+    }
+    
+    .profile-image {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .profile-image i {
+        font-size: 5rem;
+    }
+    
+    .social-link {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .perfil-card,
+    .contact-form,
+    .info-card,
+    .extras-card {
+        padding: 1.5rem;
+    }
+    
+    .exp-card {
+        padding: 1.5rem;
+    }
+    
+    .timeline-content {
+        padding: 1.5rem;
+    }
+    
+    .scroll-top {
+        width: 45px;
+        height: 45px;
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+    
+    .logo {
+        font-size: 1.25rem;
+    }
+    
+    .logo i {
+        font-size: 1.5rem;
+    }
+}
 
-	.hero-title {
-		font-size: 1.6rem;
-	}
-
-	.profile-card {
-		max-width: 300px;
-		padding: 1rem;
-		margin: 1.25rem auto;
-	}
-
-	.profile-image {
-		width: 110px;
-		height: 110px;
-	}
-
-	.profile-image i {
-		font-size: 3.5rem;
-	}
-
-	.menu-nav {
-		padding: 1.25rem;
-	}
-
-	.menu-nav .nav-link {
-		padding: 0.9rem;
-		font-size: 1rem;
-	}
-
-	/* Timeline tweaks para telas muito pequenas */
-	.timeline::before {
-		left: 20px;
-	}
-
-	.timeline-marker {
-		left: 20px;
-		width: 44px;
-		height: 44px;
-	}
-
-	.timeline-item {
-		padding-left: 56px;
-	}
-
-	.form-buttons {
-		flex-direction: column;
-		gap: 0.75rem;
-	}
+/* Correções adicionais para mobile */
+@media (max-width: 768px) {
+    /* Prevenir overflow horizontal */
+    body {
+        overflow-x: hidden;
+    }
+    
+    /* Ajustar shapes para não causar scroll horizontal */
+    .shape {
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    /* Garantir que imagens não extrapolem */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Ajustar cards para não quebrar layout */
+    .competencia-card,
+    .cert-card,
+    .exp-card {
+        min-width: 0;
+    }
+    
+    /* Melhorar legibilidade em telas pequenas */
+    .timeline-content h3,
+    .exp-card h3 {
+        font-size: 1.25rem;
+    }
+    
+    /* Ajustar ícones para mobile */
+    .competencia-icon,
+    .exp-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
 }
