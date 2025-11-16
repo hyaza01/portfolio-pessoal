@@ -9,6 +9,12 @@
  * - Highlight de menu ativo
  */
 
+const EMAIL_DEFAULT_TO = 'antoniobernabiopereira@gmail.com';
+const EMAIL_SERVICE_ID = '';
+const EMAIL_TEMPLATE_ID = '';
+const EMAIL_PUBLIC_KEY = '';
+let emailServiceReady = false;
+
 // ===================================
 // INICIALIZAÇÃO
 // ===================================
@@ -16,9 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initSmoothScroll();
     initScrollAnimations();
+    initEmailBridge();
     initContactForm();
     initScrollToTop();
     initActiveMenu();
+    initClipboardButtons();
 });
 
 // ===================================
@@ -194,13 +202,17 @@ function initContactForm() {
     const campoEmail = document.getElementById('email');
     const campoTelefone = document.getElementById('telefone');
     const campoMensagem = document.getElementById('mensagem');
+    let feedbackTimeout;
     
     // Botão limpar
     if (btnLimpar) {
         btnLimpar.addEventListener('click', function() {
             form.reset();
-            feedbackMensagem.textContent = '';
-            feedbackMensagem.className = 'feedback-message';
+            if (feedbackMensagem) {
+                feedbackMensagem.textContent = '';
+                feedbackMensagem.className = 'feedback-message';
+                feedbackMensagem.style.display = 'none';
+            }
             limparErros();
         });
     }
@@ -225,7 +237,7 @@ function initContactForm() {
     [campoNome, campoEmail, campoMensagem].forEach(campo => {
         if (campo) {
             campo.addEventListener('input', function() {
-                if (feedbackMensagem.classList.contains('erro')) {
+                if (feedbackMensagem && feedbackMensagem.classList.contains('erro')) {
                     feedbackMensagem.style.display = 'none';
                 }
                 this.style.borderColor = '';
@@ -238,8 +250,11 @@ function initContactForm() {
         e.preventDefault();
         
         // Limpar mensagens anteriores
-        feedbackMensagem.textContent = '';
-        feedbackMensagem.className = 'feedback-message';
+        if (feedbackMensagem) {
+            feedbackMensagem.textContent = '';
+            feedbackMensagem.className = 'feedback-message';
+            feedbackMensagem.style.display = 'none';
+        }
         limparErros();
         
         // Capturar valores
@@ -277,7 +292,7 @@ function initContactForm() {
             return;
         }
         
-        // Simular envio
+        // Envio real / fallback mailto
         enviarFormulario(nome, email, telefone, mensagem);
     });
     
@@ -287,29 +302,24 @@ function initContactForm() {
         return regex.test(email);
     }
     
-    // Função para exibir erro
-    function exibirErro(mensagem) {
+    function mostrarFeedback(mensagem, tipo = 'sucesso') {
+        if (!feedbackMensagem) return;
+        clearTimeout(feedbackTimeout);
         feedbackMensagem.textContent = mensagem;
-        feedbackMensagem.className = 'feedback-message erro';
-        
-        // Rolar até o feedback
+        feedbackMensagem.className = `feedback-message ${tipo}`;
+        feedbackMensagem.style.display = 'block';
         feedbackMensagem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Remover mensagem após 5 segundos
-        setTimeout(function() {
+        feedbackTimeout = setTimeout(() => {
             feedbackMensagem.style.display = 'none';
-        }, 5000);
+        }, 6000);
     }
-    
-    // Função para exibir sucesso
+
+    function exibirErro(mensagem) {
+        mostrarFeedback(mensagem, 'erro');
+    }
+
     function exibirSucesso(mensagem) {
-        feedbackMensagem.textContent = mensagem;
-        feedbackMensagem.className = 'feedback-message sucesso';
-        
-        // Remover mensagem após 5 segundos
-        setTimeout(function() {
-            feedbackMensagem.style.display = 'none';
-        }, 5000);
+        mostrarFeedback(mensagem, 'sucesso');
     }
     
     // Função para destacar campo com erro
@@ -325,39 +335,155 @@ function initContactForm() {
                 campo.style.borderColor = '';
             }
         });
+        if (feedbackMensagem) {
+            feedbackMensagem.textContent = '';
+            feedbackMensagem.className = 'feedback-message';
+            feedbackMensagem.style.display = 'none';
+        }
     }
     
-    // Função para simular envio
+    // Função para envio real / fallback
     function enviarFormulario(nome, email, telefone, mensagem) {
-        // Desabilitar botão de envio
         const btnEnviar = form.querySelector('button[type="submit"]');
-        btnEnviar.disabled = true;
-        btnEnviar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-        
-        // Simular requisição
-        setTimeout(function() {
-            // Log para desenvolvimento
-            console.log('===== FORMULÁRIO ENVIADO COM SUCESSO =====');
-            console.log('Nome:', nome);
-            console.log('E-mail:', email);
-            console.log('Telefone:', telefone);
-            console.log('Mensagem:', mensagem);
-            console.log('==========================================');
-            
-            // Exibir mensagem de sucesso
-            exibirSucesso('✅ Mensagem enviada com sucesso! Entrarei em contato em breve.');
-            
-            // Limpar formulário
+        setLoadingState(btnEnviar, true);
+
+        const payload = {
+            from_name: nome,
+            reply_to: email,
+            phone: telefone || 'Não informado',
+            message: mensagem,
+            to_email: EMAIL_DEFAULT_TO
+        };
+
+        const finalizar = mensagemSucesso => {
+            exibirSucesso(mensagemSucesso);
             form.reset();
             limparErros();
-            
-            // Reabilitar botão
-            btnEnviar.disabled = false;
-            btnEnviar.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Mensagem';
-            
-            // Alert de confirmação
-            alert('✅ Mensagem enviada com sucesso!\n\nObrigado pelo contato. Responderei em breve!');
-        }, 1500);
+            setLoadingState(btnEnviar, false);
+        };
+
+        if (emailServiceReady && typeof emailjs !== 'undefined') {
+            emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, payload)
+                .then(() => {
+                    finalizar('✅ Mensagem enviada com sucesso! Obrigado pelo contato.');
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar via EmailJS:', error);
+                    abrirMailto(nome, email, telefone, mensagem);
+                    finalizar('⚠️ Não conseguimos enviar automaticamente, mas abrimos seu e-mail com a mensagem pronta.');
+                });
+        } else {
+            abrirMailto(nome, email, telefone, mensagem);
+            finalizar('📮 Abrimos seu cliente de e-mail com uma mensagem pronta. É só revisar e enviar!');
+        }
+    }
+}
+
+// ===================================
+// EMAIL & CLIPBOARD UTILITÁRIOS
+// ===================================
+function initEmailBridge() {
+    if (typeof emailjs === 'undefined') {
+        console.info('EmailJS não carregado. Mantendo fallback via mailto.');
+        return;
+    }
+
+    if (!EMAIL_SERVICE_ID || !EMAIL_TEMPLATE_ID || !EMAIL_PUBLIC_KEY) {
+        console.info('Configure EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID e EMAIL_PUBLIC_KEY para habilitar o envio automático.');
+        return;
+    }
+
+    emailjs.init({ publicKey: EMAIL_PUBLIC_KEY });
+    emailServiceReady = true;
+}
+
+function initClipboardButtons() {
+    const copyButtons = document.querySelectorAll('[data-copy]');
+    if (!copyButtons.length) return;
+
+    copyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const value = button.dataset.copy;
+            if (!value) return;
+
+            copyToClipboard(value)
+                .then(() => animateCopyButton(button))
+                .catch(() => alert('Não foi possível copiar automaticamente. Por favor, selecione e copie manualmente.'));
+        });
+    });
+}
+
+function copyToClipboard(texto) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(texto);
+    }
+
+    return new Promise((resolve, reject) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = texto;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+            document.execCommand('copy');
+            resolve();
+        } catch (error) {
+            reject(error);
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    });
+}
+
+function animateCopyButton(button) {
+    if (!button) return;
+    if (!button.dataset.original) {
+        button.dataset.original = button.innerHTML;
+    }
+    button.classList.add('copied');
+    button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+    setTimeout(() => {
+        button.classList.remove('copied');
+        button.innerHTML = button.dataset.original;
+    }, 1800);
+}
+
+function abrirMailto(nome, email, telefone, mensagem) {
+    const assunto = encodeURIComponent(`Contato via portfólio - ${nome}`);
+    const corpo = encodeURIComponent(montarCorpoEmail(nome, email, telefone, mensagem));
+    window.location.href = `mailto:${EMAIL_DEFAULT_TO}?subject=${assunto}&body=${corpo}`;
+}
+
+function montarCorpoEmail(nome, email, telefone, mensagem) {
+    return [
+        `Nome: ${nome}`,
+        `E-mail: ${email}`,
+        `Telefone: ${telefone || 'Não informado'}`,
+        '',
+        'Mensagem:',
+        mensagem,
+        '',
+        '---',
+        'Enviado via portfólio online.'
+    ].join('\n');
+}
+
+function setLoadingState(button, isLoading) {
+    if (!button) return;
+
+    if (!button.dataset.defaultText) {
+        button.dataset.defaultText = button.innerHTML;
+    }
+
+    if (isLoading) {
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    } else {
+        button.disabled = false;
+        button.innerHTML = button.dataset.defaultText || '<i class="fas fa-paper-plane"></i> Enviar';
     }
 }
 
@@ -409,15 +535,14 @@ window.addEventListener('scroll', function() {
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
     
-    // Animar números nas barras de progresso
-    const skillBars = document.querySelectorAll('.level-bar');
+    // Animar barras de progresso usando variáveis CSS
+    const skillBars = document.querySelectorAll('.skill-bar');
     skillBars.forEach(bar => {
-        const level = bar.style.getPropertyValue('--level');
-        bar.style.width = '0%';
-        
+        const level = bar.style.getPropertyValue('--level') || bar.dataset.level || '0%';
+        bar.style.setProperty('--current-level', '0%');
         setTimeout(() => {
-            bar.style.width = level;
-        }, 100);
+            bar.style.setProperty('--current-level', level);
+        }, 150);
     });
 });
 
